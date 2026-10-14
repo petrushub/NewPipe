@@ -476,6 +476,9 @@
                     android:layout_marginTop="2dp"
                     android:layout_weight="1"
                     android:nextFocusDown="@id/screenRotationButton"
+                    android:paddingTop="@dimen/player_seekbar_touch_padding"
+                    android:paddingBottom="@dimen/player_seekbar_touch_padding"
+                    android:thumb="@drawable/player_seekbar_thumb"
                     tools:progress="25"
                     tools:secondaryProgress="50" />
 

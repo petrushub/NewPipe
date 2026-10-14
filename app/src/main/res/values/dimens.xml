@@ -133,4 +133,7 @@
     <!-- Feed Groups dimensions-->
 
     <dimen name="search_suggestion_text_size">16sp</dimen>
+
+    <dimen name="player_seekbar_thumb_size">28dp</dimen>
+    <dimen name="player_seekbar_touch_padding">12dp</dimen>
 </resources>
