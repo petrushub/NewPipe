@@ -28,6 +28,7 @@ import org.schabi.newpipe.local.feed.FeedFragment;
 import org.schabi.newpipe.local.history.StatisticsPlaylistFragment;
 import org.schabi.newpipe.local.playlist.LocalPlaylistFragment;
 import org.schabi.newpipe.local.subscription.SubscriptionFragment;
+import org.schabi.newpipe.radio.RadioFragment;
 import org.schabi.newpipe.util.KioskTranslator;
 import org.schabi.newpipe.util.ServiceHelper;
 
@@ -165,7 +166,8 @@ public abstract class Tab {
         KIOSK(new KioskTab()),
         CHANNEL(new ChannelTab()),
         PLAYLIST(new PlaylistTab()),
-        FEEDGROUP(new FeedGroupTab());
+        FEEDGROUP(new FeedGroupTab()),
+        RADIO(new RadioTab());
 
         private final Tab tab;
 
@@ -282,6 +284,31 @@ public abstract class Tab {
         @Override
         public BookmarkFragment getFragment(final Context context) {
             return new BookmarkFragment();
+        }
+    }
+
+    public static class RadioTab extends Tab {
+        public static final int ID = 10;
+
+        @Override
+        public int getTabId() {
+            return ID;
+        }
+
+        @Override
+        public String getTabName(final Context context) {
+            return context.getString(R.string.radio);
+        }
+
+        @DrawableRes
+        @Override
+        public int getTabIconRes(final Context context) {
+            return R.drawable.ic_radio;
+        }
+
+        @Override
+        public RadioFragment getFragment(final Context context) {
+            return new RadioFragment();
         }
     }
 

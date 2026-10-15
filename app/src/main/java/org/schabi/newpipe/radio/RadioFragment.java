@@ -68,6 +68,10 @@ public class RadioFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        // inside the main page tabs, the title is managed by MainFragment
+        if (getParentFragment() != null) {
+            return;
+        }
         final ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(true);
