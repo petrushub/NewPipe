@@ -30,7 +30,7 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
 
 jobs:
-  build-and-test-jvm:
+  build-apk:
     runs-on: ubuntu-latest
 
     permissions:

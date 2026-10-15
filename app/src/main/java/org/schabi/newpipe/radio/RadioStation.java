@@ -16,7 +16,10 @@ public final class RadioStation {
                             + "SER_BARCELONA.mp3"),
             new RadioStation("ser_salamanca", "Radio Cadena SER Salamanca",
                     "https://playerservices.streamtheworld.com/api/livestream-redirect/"
-                            + "SER_SALAMANCA.mp3")));
+                            + "SER_SALAMANCA.mp3"),
+            new RadioStation("ser_bilbao", "Radio Cadena SER Bilbao",
+                    "https://playerservices.streamtheworld.com/api/livestream-redirect/"
+                            + "SER_BILBAO.mp3")));
 
     @NonNull
     public final String id;
