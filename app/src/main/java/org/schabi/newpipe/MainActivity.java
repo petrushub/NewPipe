@@ -67,6 +67,7 @@ import org.schabi.newpipe.databinding.InstanceSpinnerLayoutBinding;
 import org.schabi.newpipe.databinding.ToolbarLayoutBinding;
 import org.schabi.newpipe.error.ErrorUtil;
 import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.extractor.ServiceList;
 import org.schabi.newpipe.extractor.StreamingService;
 import org.schabi.newpipe.extractor.comments.CommentsInfoItem;
 import org.schabi.newpipe.extractor.exceptions.ExtractionException;
@@ -101,6 +102,7 @@ import org.schabi.newpipe.views.FocusOverlayView;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -125,11 +127,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int ITEM_ID_BOOKMARKS = -3;
     private static final int ITEM_ID_DOWNLOADS = -4;
     private static final int ITEM_ID_HISTORY = -5;
+    private static final int ITEM_ID_RADIO = -6;
     private static final int ITEM_ID_SETTINGS = 0;
     private static final int ITEM_ID_DONATION = 1;
     private static final int ITEM_ID_ABOUT = 2;
 
     private static final int ORDER = 0;
+
+    /**
+     * YouTube kiosks that are not shown in the navigation drawer.
+     */
+    private static final List<String> HIDDEN_DRAWER_KIOSKS = Arrays.asList(
+            "Trending", "trending_gaming", "trending_music", "trending_movies_and_shows",
+            "trending_podcasts_episodes");
+
     public static final String KEY_IS_IN_BACKGROUND = "is_in_background";
 
     private SharedPreferences sharedPreferences;
@@ -298,7 +309,16 @@ public class MainActivity extends AppCompatActivity {
 
         int kioskMenuItemId = 0;
 
+        if (service.getServiceId() == ServiceList.YouTube.getServiceId()) {
+            drawerLayoutBinding.navigation.getMenu()
+                    .add(R.id.menu_kiosks_group, ITEM_ID_RADIO, 0, R.string.radio)
+                    .setIcon(R.drawable.ic_radio);
+        }
+
         for (final String ks : service.getKioskList().getAvailableKiosks()) {
+            if (isHiddenDrawerKiosk(service, ks)) {
+                continue;
+            }
             drawerLayoutBinding.navigation.getMenu()
                     .add(R.id.menu_kiosks_group, kioskMenuItemId, 0, KioskTranslator
                             .getTranslatedKioskName(ks, this))
@@ -325,6 +345,8 @@ public class MainActivity extends AppCompatActivity {
             changeService(item);
         } else if (groupId == R.id.menu_tabs_group) {
             tabSelected(item);
+        } else if (groupId == R.id.menu_kiosks_group && item.getItemId() == ITEM_ID_RADIO) {
+            NavigationHelper.openRadioFragment(getSupportFragmentManager());
         } else if (groupId == R.id.menu_kiosks_group) {
             try {
                 kioskSelected(item);
@@ -371,10 +393,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private static boolean isHiddenDrawerKiosk(final StreamingService service,
+                                               final String kioskId) {
+        return service.getServiceId() == ServiceList.YouTube.getServiceId()
+                && HIDDEN_DRAWER_KIOSKS.contains(kioskId);
+    }
+
     private void kioskSelected(final MenuItem item) throws ExtractionException {
         final StreamingService currentService = ServiceHelper.getSelectedService(this);
         int kioskMenuItemId = 0;
         for (final String kioskId : currentService.getKioskList().getAvailableKiosks()) {
+            if (isHiddenDrawerKiosk(currentService, kioskId)) {
+                continue;
+            }
             if (kioskMenuItemId == item.getItemId()) {
                 NavigationHelper.openKioskFragment(getSupportFragmentManager(),
                         currentService.getServiceId(), kioskId);
